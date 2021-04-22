@@ -10,6 +10,4 @@ const HomePage = () => (
     </div>
 )
 
-export {
-    HomePage
-}
+export default HomePage;
