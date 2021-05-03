@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import CollectionsOverview from "../../components/collections-overview/collections-overview.component";
 import CollectionPage from "../collection/collection.component";
+import WithSpinner from "../../components/with-spinner/with-spinner.component";
 
 import { updateCollections } from "../../redux/shop/shop.actions";
 
@@ -12,25 +13,57 @@ import {
   firestore,
 } from "../../firebase/firebase.utils";
 
+const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
+const CollectionPageWithSpinner = WithSpinner(CollectionPage);
+
 class ShopPage extends React.Component {
+  // constructor() {
+  //   super();
+
+  //   this.state = {
+  //     loading: true
+  //   }
+  // }
+  state = {
+    loading: true,
+  };
   unsubscribeFromSnapshot = null;
 
   componentDidMount() {
     const { updateCollections } = this.props;
     const collectionRef = firestore.collection("collections");
-    collectionRef.onSnapshot(async (snapshot) => {
+
+    // fetch(
+    //   "https://firestore.googleapis.com/v1/projects/clothes-shop-app/databases/(default)/documents/collections"
+    // )
+    //   .then((response) => response.json())
+    //   .then((collections) => console.log(collections));
+
+    collectionRef.get().then((snapshot) => {
       const collectionsMap = convertCollectionSnapshotToMap(snapshot);
       updateCollections(collectionsMap);
+      this.setState({
+        loading: false,
+      });
     });
   }
   render() {
     const { match } = this.props;
+    const { loading } = this.state;
     return (
       <div className="shop-page">
-        <Route exact path={`${match.path}`} component={CollectionsOverview} />
+        <Route
+          exact
+          path={`${match.path}`}
+          render={(props) => (
+            <CollectionsOverviewWithSpinner isLoading={loading} {...props} />
+          )}
+        />
         <Route
           path={`${match.path}/:collectionId`}
-          component={CollectionPage}
+          render={(props) => (
+            <CollectionPageWithSpinner isLoading={loading} {...props} />
+          )}
         />
       </div>
     );
