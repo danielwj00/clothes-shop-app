@@ -19,22 +19,20 @@ export const fetchCollectionsFailure = (errorMessage) => ({
 });
 
 export const fetchCollectionsStartAsync = () => {
-  return (dispatch) => {
-    const collectionRef = firestore.collection("collections");
-    dispatch(fetchCollectionsStart());
-
-    // fetch(
-    //   "https://firestore.googleapis.com/v1/projects/clothes-shop-app/databases/(default)/documents/collections"
-    // )
-    //   .then((response) => response.json())
-    //   .then((collections) => console.log(collections));
-
-    collectionRef
-      .get()
-      .then((snapshot) => {
-        const collectionsMap = convertCollectionSnapshotToMap(snapshot);
-        dispatch(fetchCollectionsSuccess(collectionsMap));
-      })
-      .catch((error) => dispatch(fetchCollectionsFailure(error.message)));
-  };
+  // return (dispatch) => {
+  //   const collectionRef = firestore.collection("collections");
+  //   dispatch(fetchCollectionsStart());
+  //   // fetch(
+  //   //   "https://firestore.googleapis.com/v1/projects/clothes-shop-app/databases/(default)/documents/collections"
+  //   // )
+  //   //   .then((response) => response.json())
+  //   //   .then((collections) => console.log(collections));
+  //   collectionRef
+  //     .get()
+  //     .then((snapshot) => {
+  //       const collectionsMap = convertCollectionSnapshotToMap(snapshot);
+  //       dispatch(fetchCollectionsSuccess(collectionsMap));
+  //     })
+  //     .catch((error) => dispatch(fetchCollectionsFailure(error.message)));
+  // };
 };
